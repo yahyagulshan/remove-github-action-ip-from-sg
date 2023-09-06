@@ -29,12 +29,20 @@ jobs:
             --subnet-id subnet-01c079ede545c1bb7 \
             --security-group-ids sg-014ddc6112fb66838 \
             --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=yahya-test-instance}]'
-
-      - name: Remove Github Actions IP from security group
+      - name: Add Github Actions IP to Security group
         run: |
-          aws ec2 revoke-security-group-ingress --group-name ${{ env.AWS_SG_NAME }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
+          aws ec2 authorize-security-group-ingress --group-name ${{ env.AWS_SG_NAME }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32    
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: ${{ env.AWS_DEFAULT_REGION }}
-        if: always()
+      - uses: actions/checkout@v2      
+
+      # - name: Remove Github Actions IP from security group
+      #   run: |
+      #     aws ec2 revoke-security-group-ingress --group-name ${{ env.AWS_SG_NAME }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
+      #   env:
+      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     AWS_DEFAULT_REGION: ${{ env.AWS_DEFAULT_REGION }}
+      #   if: always()
