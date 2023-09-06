@@ -29,6 +29,9 @@ jobs:
             --subnet-id subnet-01c079ede545c1bb7 \
             --security-group-ids sg-014ddc6112fb66838 \
             --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=yahya-test-instance}]'
+      - name: Get Github action IP
+        id: ip
+        uses: haythem/public-ip@v1.2     
       - name: Setting environment variables..
         run: |
           echo "AWS_DEFAULT_REGION=us-east-1" >> $GITHUB_ENV
