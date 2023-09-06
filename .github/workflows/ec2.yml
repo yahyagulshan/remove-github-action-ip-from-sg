@@ -29,6 +29,10 @@ jobs:
             --subnet-id subnet-01c079ede545c1bb7 \
             --security-group-ids sg-014ddc6112fb66838 \
             --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=yahya-test-instance}]'
+      - name: Setting environment variables..
+        run: |
+          echo "AWS_DEFAULT_REGION=us-east-1" >> $GITHUB_ENV
+          echo "AWS_SG_NAME=web-app-sg" >> $GITHUB_ENV      
       - name: Add Github Actions IP to Security group
         run: |
           aws ec2 authorize-security-group-ingress --group-name ${{ env.AWS_SG_NAME }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32    
